@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ひとりの冒険絵柄揃えツール</title>
+  <title>ひとりの冒険5色揃えツール</title>
   <style>
     body {
       text-align: center;
@@ -86,7 +86,7 @@
 </head>
 <body>
 
-<h2>ひとりの冒険絵柄揃えツール</h2>
+<h2>ひとりの冒険5色揃えツール</h2>
 <div id="description">
   円をタップすると赤(喜多)→青(リョウ)→黄(虹夏)→赤…の順に色が遷移します。<br>色を設定したら実行ボタンを押してください。
 </div>
@@ -144,6 +144,10 @@
   }
 
   function solvePresses(colors) {
+      // 追加: すでに5つ同色の場合
+  const count = [0, 0, 0];
+  for (let c of colors) count[c]++;
+  if (count.includes(5)) return "already-solved";
     const product = (arr, r = [], res = []) => {
       if (r.length === arr.length) return res.push([...r]);
       for (let i = 0; i < 3; i++) {
@@ -201,18 +205,25 @@
     return result;
   }
 
-  function runSolver() {
-    const result = solvePresses(circleStates);
-    const output = document.getElementById('output');
-    if (!result) {
-      output.textContent = "有効な押し順が見つかりませんでした。";
-      return;
-    }
+function runSolver() {
+  const result = solvePresses(circleStates);
+  const output = document.getElementById('output');
 
-    let msg = "--- 押す順番---\n";
-    msg += result.seq.map(i => `円${i + 1}`).join(" → ");
-    output.textContent = msg;
+  if (result === "already-solved") {
+    output.textContent = "すでに5つ同じ色が揃っています！";
+    return;
   }
+
+  if (!result) {
+    output.textContent = "有効な押し順が見つかりませんでした。";
+    return;
+  }
+
+  let msg = "--- 押す順番（同じ点連続なし）---\n";
+  msg += result.seq.map(i => `点${i + 1}`).join(" → ");
+  output.textContent = msg;
+}
+
 </script>
 
 </body>
