@@ -2,49 +2,88 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>色合わせパズル</title>
+  <title>ひとりの冒険手順計算ツール</title>
   <style>
-    body { text-align: center; font-family: sans-serif; }
+    body {
+      text-align: center;
+      font-family: sans-serif;
+    }
+    h2 {
+      margin-top: 20px;
+    }
+    #circle-container {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 30px auto;
+    }
     .circle {
-      width: 60px; height: 60px;
+      width: 60px;
+      height: 60px;
       border-radius: 50%;
-      display: inline-block;
-      margin: 10px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin: -30px;
       cursor: pointer;
       border: 2px solid #444;
+      transition: background-color 0.3s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      font-weight: bold;
+      user-select: none;
     }
     .red    { background-color: red; }
     .blue   { background-color: blue; }
     .yellow { background-color: gold; }
-    #output { margin-top: 20px; white-space: pre-wrap; }
+    #output {
+      margin-top: 20px;
+      white-space: pre-wrap;
+    }
   </style>
 </head>
 <body>
 
-<h2>6つの円をクリックして色を設定してください</h2>
-<div id="circles"></div>
-<br>
+<h2>ひとりの冒険手順計算ツール</h2>
+
+<div id="circle-container"></div>
+
 <button onclick="runSolver()">実行</button>
 <div id="output"></div>
 
 <script>
   const colors = ['red', 'blue', 'yellow'];
-  const colorNames = ['r', 'b', 'y'];
   const circleStates = [0, 0, 0, 0, 0, 0];
+  const container = document.getElementById('circle-container');
+  const radius = 120;
 
-  const container = document.getElementById('circles');
   for (let i = 0; i < 6; i++) {
+    const angle = (i / 6) * 2 * Math.PI - Math.PI / 3; // -60度スタート（右上）
+    const x = radius * Math.cos(angle);
+    const y = radius * Math.sin(angle);
+
     const c = document.createElement('div');
     c.className = 'circle red';
     c.dataset.index = i;
+    c.style.transform = `translate(${x}px, ${y}px)`;
+
+    const label = document.createElement('div');
+    label.textContent = i + 1;
+    c.appendChild(label);
+
     c.onclick = () => {
       circleStates[i] = (circleStates[i] + 1) % 3;
       c.className = 'circle ' + colors[circleStates[i]];
     };
+
     container.appendChild(c);
   }
 
-  function mod3(n) { return ((n % 3) + 3) % 3; }
+  function mod3(n) {
+    return ((n % 3) + 3) % 3;
+  }
 
   function solvePresses(colors) {
     const product = (arr, r = [], res = []) => {
@@ -128,3 +167,4 @@
 
 </body>
 </html>
+
