@@ -219,7 +219,7 @@ function runSolver() {
     return;
   }
 
-  let msg = "--- 押す順番（同じ点連続なし）---\n";
+  let msg = "--- 押す順番---\n";
   msg += result.seq.map(i => `点${i + 1}`).join(" → ");
   output.textContent = msg;
 }
