@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>ひとりの冒険手順計算ツール</title>
+  <title>ひとりの冒険絵柄揃えツール</title>
   <style>
     body {
       text-align: center;
@@ -45,6 +45,7 @@
     #output {
       margin-top: 20px;
       white-space: pre-wrap;
+      font-size: 16px;
     }
   </style>
 </head>
@@ -67,7 +68,7 @@
   const radius = 120;
 
   for (let i = 0; i < 6; i++) {
-    const angle = (i / 6) * 2 * Math.PI - Math.PI / 3; // -60度スタート（右上）
+    const angle = (i / 6) * 2 * Math.PI - Math.PI / 3;
     const x = radius * Math.cos(angle);
     const y = radius * Math.sin(angle);
 
@@ -150,8 +151,16 @@
     return result;
   }
 
-  
+  function runSolver() {
+    const result = solvePresses(circleStates);
+    const output = document.getElementById('output');
+    if (!result) {
+      output.textContent = "有効な押し順が見つかりませんでした。";
+      return;
+    }
 
+    let msg = "--- 押す順番（同じ点連続なし）---\n";
+    msg += result.seq.map(i => `点${i + 1}`).join(" → ");
     output.textContent = msg;
   }
 </script>
