@@ -20,34 +20,35 @@
       font-size: 0.9em;
       padding: 0 1em;
     }
-    #circle-container {
-      position: relative;
-      width: 90vw;
-      max-width: 300px;
-      height: 90vw;
-      max-height: 300px;
-      margin: 30px auto;
-    }
-    .circle {
-      width: 14vw;
-      height: 14vw;
-      max-width: 60px;
-      max-height: 60px;
-      border-radius: 50%;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      margin: -7vw;
-      cursor: pointer;
-      border: 2px solid #444;
-      transition: background-color 0.3s;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      color: white;
-      font-weight: bold;
-      font-size: 1em;
-      user-select: none;
+#circle-container {
+  position: relative;
+  width: 90vmin;
+  height: 90vmin;
+  max-width: 400px;
+  max-height: 400px;
+  margin: 30px auto;
+}
+
+.circle {
+  width: 14vmin;
+  height: 14vmin;
+  max-width: 60px;
+  max-height: 60px;
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  border: 2px solid #444;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  color: white;
+  font-size: 1em;
+  transition: background-color 0.3s;
+  user-select: none;
+}
+
     }
     .red    { background-color: red; }
     .blue   { background-color: blue; }
@@ -82,33 +83,35 @@
   const circleStates = [0, 0, 0, 0, 0, 0];
   const container = document.getElementById('circle-container');
 
-  function placeCircles() {
-    const rect = container.getBoundingClientRect();
-    const radius = rect.width / 2.2;
+function placeCircles() {
+  const rect = container.getBoundingClientRect();
+  const radius = rect.width / 2.3;
 
-    container.innerHTML = '';
-    for (let i = 0; i < 6; i++) {
-      const angle = (i / 6) * 2 * Math.PI - Math.PI / 3;
-      const x = radius * Math.cos(angle);
-      const y = radius * Math.sin(angle);
+  container.innerHTML = '';
+  for (let i = 0; i < 6; i++) {
+    const angle = (i / 6) * 2 * Math.PI - Math.PI / 3;
+    const x = 50 + radius * Math.cos(angle) / rect.width * 100;
+    const y = 50 + radius * Math.sin(angle) / rect.height * 100;
 
-      const c = document.createElement('div');
+    const c = document.createElement('div');
+    c.className = 'circle ' + colors[circleStates[i]];
+    c.dataset.index = i;
+    c.style.left = `${x}%`;
+    c.style.top = `${y}%`;
+
+    const label = document.createElement('div');
+    label.textContent = i + 1;
+    c.appendChild(label);
+
+    c.onclick = () => {
+      circleStates[i] = (circleStates[i] + 1) % 3;
       c.className = 'circle ' + colors[circleStates[i]];
-      c.dataset.index = i;
-      c.style.transform = `translate(${x}px, ${y}px)`;
+    };
 
-      const label = document.createElement('div');
-      label.textContent = i + 1;
-      c.appendChild(label);
-
-      c.onclick = () => {
-        circleStates[i] = (circleStates[i] + 1) % 3;
-        c.className = 'circle ' + colors[circleStates[i]];
-      };
-
-      container.appendChild(c);
-    }
+    container.appendChild(c);
   }
+}
+
 
   window.addEventListener('resize', placeCircles);
   window.addEventListener('load', placeCircles);
