@@ -89,8 +89,10 @@
     container.innerHTML = '';
     for (let i = 0; i < 6; i++) {
       const angle = (i / 6) * 2 * Math.PI - Math.PI / 3;
+　    const compression = 0.85;  // 0.85 = 15%縦圧縮（好みに応じて変更）
+
       const x = 50 + (radius * Math.cos(angle) / rect.width) * 100;
-      const y = 50 + (radius * Math.sin(angle) / rect.height) * 100;
+      const y = 50 + (radius * Math.sin(angle) * compression / rect.height) * 100;
 
       const c = document.createElement('div');
       c.className = 'circle ' + colors[circleStates[i]];
