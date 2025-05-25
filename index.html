@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ひとりの冒険 絵柄揃えツール</title>
+  <title>ひとりの冒険 揃えツール</title>
   <style>
     body {
       text-align: center;
@@ -12,22 +12,22 @@
       padding: 0;
     }
     h2 {
-      margin-top: 20px;
-      font-size: 1.2em;
-    }
+  margin-top: 10px;
+  font-size: 1.2em;
+}
     #description {
-      margin-top: 10px;
-      font-size: 0.9em;
-      padding: 0 1em;
-    }
+  margin-top: 5px;
+  font-size: 0.9em;
+  padding: 0 1em;
+}
     #circle-container {
-      position: relative;
-      width: 90vmin;
-      height: 90vmin;
-      max-width: 400px;
-      max-height: 400px;
-      margin: 10px auto 5px auto;
-    }
+  position: relative;
+  width: 90vmin;
+  height: 90vmin;
+  max-width: 400px;
+  max-height: 400px;
+  margin: 5px auto;
+}
     .circle {
       width: 14vmin;
       height: 14vmin;
@@ -89,7 +89,7 @@
 </head>
 <body>
 
-<h2>ひとりの冒険 絵柄揃えツール</h2>
+<h2>ひとりの冒険 揃えツール</h2>
 <div id="description">
   円をタップすると赤(喜多)→青(リョウ)→黄(虹夏)→赤…の順に色が遷移します。<br>色を設定し、どちらを揃えるかを選んで実行ボタンを押してください。
 </div>
@@ -122,7 +122,7 @@ const colorNames = ['赤', '青', '黄'];
 function placeCircles() {
   const rect = container.getBoundingClientRect();
   const radius = rect.width / 2.3;
-  const compression = 0.70;
+  const compression = 0.85;
   container.innerHTML = '';
 
   for (let i = 0; i < 6; i++) {
@@ -274,4 +274,3 @@ window.addEventListener('load', placeCircles);
 
 </body>
 </html>
-
