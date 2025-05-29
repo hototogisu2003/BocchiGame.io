@@ -97,12 +97,14 @@
 <div id="circle-container"></div>
 
 <div class="controls">
-  <label><input type="radio" name="mode" value="5" checked> 5つ揃える</label>
-  <label><input type="radio" name="mode" value="6"> 6つ揃える</label>
-  <select id="targetColor" disabled>
-    <option value="0">赤 (喜多)</option>
-    <option value="1">青 (リョウ)</option>
-    <option value="2">黄 (虹夏)</option>
+<label><input type="radio" name="mode" value="5"> 5つ揃える</label>
+<label><input type="radio" name="mode" value="6" checked> 6つ揃える</label>
+<select id="targetColor">
+  <option value="-1" selected>自動（最小手）</option>
+  <option value="0">赤 (喜多)</option>
+  <option value="1">青 (リョウ)</option>
+  <option value="2">黄 (虹夏)</option>
+</select>
   </select>
 </div>
 
@@ -260,19 +262,35 @@ function runSolver() {
     } else {
       output.textContent = "--- 押す順番 ---\n" + result.seq.map(i => `円${i + 1}`).join(" → ");
     }
-  } else {
-    const result = solveSix(circleStates, targetColor);
-    if (!result) {
-      output.textContent = `${colorNames[targetColor]}に6つ揃えることはできません。`;
-    } else {
-      output.textContent = `--- 押す順番（${colorNames[targetColor]}に揃える） ---\n` + result.seq.map(i => `円${i + 1}`).join(" → ");
+  }  else {          // === 6つ揃えるモード ===
+  const selVal = parseInt(document.getElementById('targetColor').value);
+  const candidates = (selVal === -1) ? [0, 1, 2] : [selVal];
+
+  let best = null;
+  let bestColor = null;
+
+  for (const c of candidates) {
+    const res = solveSix(circleStates, c);
+    if (!res) continue;
+    if (!best || res.seq.length < best.seq.length) {
+      best = res;
+      bestColor = c;
     }
   }
+
+  if (!best) {
+    output.textContent = "3色いずれでも 6 つ揃えることはできません。";
+  } else {
+    output.textContent =
+      `--- 押す順番 ---\n` +
+      best.seq.map(i => `円${i + 1}`).join(" → ");
+  }
+}
+
 }
 
 document.querySelectorAll('input[name="mode"]').forEach(radio => {
   radio.addEventListener('change', () => {
-    document.getElementById('targetColor').disabled = radio.value !== "6";
   });
 });
 
